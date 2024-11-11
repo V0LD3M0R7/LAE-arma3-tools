@@ -1,26 +1,50 @@
 #!/bin/bash
 
-# Input HTML file
-input_file="your_html_modpack.html"
-output_file="mod_names_and_ids.txt"
+# Input HTML file and output file
+input_file="LAE-classic-08-11-2024.html"
+output_file="mod_array.txt"
 
-# Function to lowercase mod names
-convert_to_lowercase() {
-    # Convert the string to lowercase
-    echo "$1" | tr 'A-Z' 'a-z'
-}
+# Clear output file if it exists
+> "$output_file"
 
-# Extract mod names and IDs and save to output file
-grep -oP '(?<=<td data-type="DisplayName">).*?(?=</td>)' "$input_file" | while read -r mod_name; do
-    # Clean the mod name: remove special characters, replace spaces with underscores, and lowercase it
-    clean_mod_name=$(echo "$mod_name" | sed 's/[^a-zA-Z0-9 ]//g' | sed 's/ /_/g')
-    clean_mod_name=$(convert_to_lowercase "$clean_mod_name")
+echo "       __    ___    ______     ___                   ___   _____   "
+echo "      / /   /   |  / ____/    /   |  _____________  /   | |__  /   "
+echo "     / /   / /| | / __/______/ /| | / ___/ __  __ \/ /| |  /_ <    "
+echo "    / /___/ ___ |/ /__/_____/ ___ |/ /  / / / / / / ___ |___/ /    "
+echo "   /_____/_/  |_/_____/    /_/  |_/_/  /_/ /_/ /_/_/  |_/____/     "
+echo "   ____  ______________  __  __   ____/ (_)___  ___   ___  _____   "
+echo "  / __ \/ ___/ __// __ \/ / / /  / ___ / / __ \/ __\ / _ \/ ___/   "
+echo " / /_/ / /  / /  / /_/ / /_/ /  / /_/ / / /_/ / /_/ /  __/ /       "
+echo " \__,_/_/  /_/   \__,_/\__, /   \__,_/_/\__, /\__, /\___/_/        "
+echo "                      /____/           /____//____/                "
+echo ""
+echo "                      written by V0LD3M0R7                         "
 
-    # Extract the mod ID from the corresponding <a href> link
-    mod_id=$(grep -oP "(?<=<td data-type=\"DisplayName\">$mod_name</td>.*?id=)\d+" "$input_file")
-    
-    # Write clean, lowercased mod name and mod ID to the output file
-    echo "$clean_mod_name $mod_id" >> "$output_file"
-done
+# Parse HTML file to extract mod names and IDs
+awk '
+    /<td data-type="DisplayName">/ {
+        # Extract the mod name between the tags
+        match($0, /<td data-type="DisplayName">([^<]*)<\/td>/, name)
+        mod_name = name[1]
 
+        # Clean and lowercase the mod name
+        gsub(/[^a-zA-Z0-9 ]/, "", mod_name)       # Remove non-alphanumeric characters except spaces
+        gsub(/[[:space:]]+/, "_", mod_name)       # Replace spaces or multiple spaces with a single underscore
+        mod_name = tolower(mod_name)
+    }
+    /<a href=.*id=[0-9]+/ {
+        # Extract the mod ID from the link
+        match($0, /id=([0-9]+)/, id)
+        mod_id = id[1]
+
+        # Output to the file only if both mod_name and mod_id are set, with @ before mod_name
+        if (mod_name && mod_id) {
+            print "@" mod_name " " mod_id >> "'"$output_file"'"
+            mod_name = ""; mod_id = "" # Reset for the next iteration
+        }
+    }
+' "$input_file"
+
+echo "";
 echo "Array text file has been created: $output_file"
+exit
