@@ -1,0 +1,6 @@
+[paths]
+modSource = "/.../SteamLibrary/steamapps/workshop/content/107410/"
+outDir = "/your/desired/location/"
+
+[modpack]
+file = "LAE-classic.txt"
