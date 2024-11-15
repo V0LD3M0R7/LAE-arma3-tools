@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Input HTML file and output file
-input_file="LAE-classic-08-11-2024.html"
+input_file="arma3-modpack.html"
 output_file="mod_array.txt"
 
 # Clear output file if it exists
