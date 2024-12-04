@@ -25,11 +25,12 @@ echo "       / /_/ __ \/ ___/  / ___/ _ \/ ___/ | / / _ \/ ___/  / __ \/ __  / _
 echo "      / __/ /_/ / /     (__  )  __/ /   | |/ /  __/ /     / /_/ / /_/ / /_/ / /_/ / / / (__  )        ";
 echo "     /_/  \____/_/     /____/\___/_/    |___/\___/_/      \__,_/\__,_/\__,_/\____/_/ /_/____/         ";
 echo "                                                                                                      ";
-echo "                                         written by V0LD3M0R7                                         ";
+echo "                                        written by V0LD3M0R7                                          ";
 sleep 3
 
 count=$(wc -l < "$file")
 
+# Print of defined variables
 echo "Mod Source: $modSource"
 echo "Output Directory: $outDir"
 echo "Number of Mods: $count"
@@ -79,6 +80,7 @@ for ((i=1;i<=${depth};i++)); do
     done
 done
 
+# Final messege
 echo ""
 echo "Copying and renaming complete";
 sleep 3
